@@ -1,0 +1,119 @@
+<section class="px-4 py-8 max-w-screen-xl mx-auto text-white">
+    <div class="flex flex-col lg:flex-row gap-8">
+  
+      <div class="flex-shrink-0 w-full lg:w-[220px]">
+        <img [src]="'https://image.tmdb.org/t/p/w500' + detail.poster_path" alt="Poster" class="rounded shadow-md w-full h-auto object-cover">
+      </div>
+  
+      <div class="flex flex-col justify-start w-full space-y-3">
+  
+        <div class="flex items-center justify-between flex-wrap gap-4">
+          <h1 class="text-3xl font-heading font-bold">{{ detail.title || detail.name }}</h1>
+          <div class="w-14 h-14 rounded-full border-4 border-accent bg-accent flex items-center justify-center text-lg font-bold text-secondary">
+            {{ detail.vote_average | number: '1.1-1' }}
+          </div>
+        </div>
+  
+        <h2 class="text-base text-gray-300">
+          {{ detail.release_date || detail.first_air_date | date: 'yyyy' }} · Dirigido por {{ director }}
+        </h2>
+  
+        <h3 class="text-xs uppercase tracking-wide text-accent">
+          {{ detail.genres | uppercase }}
+        </h3>
+  
+        <p class="text-sm text-white leading-relaxed">
+          {{ detail.overview }}
+        </p>
+  
+        <div class="flex gap-4 pt-2">
+          <button
+            class="w-full font-heading bg-accent text-secondary py-2 rounded hover:bg-platinum transition-colors duration-300"
+            (click)="addItem()">
+            Añadir a la lista
+          </button>
+
+          <button 
+            (click)="markViewed()"
+            [ngClass]="{
+              'bg-green-500 text-white': vista,
+              'bg-platinum text-secondary': !vista
+            }"
+            class="w-full font-heading py-2 rounded transition-colors duration-300">
+            {{ vista ? 'Marcado como visto' : 'Marcar como visto' }}
+          </button>
+        </div>
+  
+      </div>
+    </div>
+
+    <div *ngIf="trailerUrl" class="mt-10 flex justify-center">
+        <div class="w-full sm:w-4/5 md:w-3/4 lg:w-2/3 xl:w-1/2">
+          <div class="aspect-video rounded overflow-hidden shadow-lg">
+            <iframe
+              class="w-full h-full"
+              [src]="trailerUrl"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+    </div>
+
+    <div *ngIf="usuario; else noSesion" class="mb-6">
+      <h3 class="text-lg font-semibold mb-2">Escribe un comentario</h3>
+      <textarea [(ngModel)]="comment" rows="3" class="w-full p-3 rounded bg-platinum text-black mb-2"></textarea>
+      <button (click)="submitComment()" class="bg-accent text-secondary px-4 py-2 rounded hover:bg-platinum transition-colors duration-300">
+        Enviar
+      </button>
+    </div>
+
+    <ng-template #noSesion>
+      <p class="text-white mt-6">
+        Debes <a routerLink="/login" class="text-accent underline">iniciar sesión</a> para comentar.
+      </p>
+    </ng-template>
+
+    <ng-container *ngFor="let commentItem of comments">
+      <ng-container *ngTemplateOutlet="renderComment; context: { $implicit: commentItem, level: 0 }"></ng-container>
+    </ng-container>
+
+    <ng-template #renderComment let-comment let-level="level">
+      <div class="bg-gray-800 rounded mb-4 p-4" [ngStyle]="{ 'margin-left.px': level * 24 }">
+        <div class="flex justify-between items-center bg-primary px-3 py-2 rounded-t">
+          <span class="font-semibold">{{ comment.user }}</span>
+          <div class="flex items-center space-x-4">
+            <button
+              (click)="toggleLike(comment)"
+              class="text-sm flex items-center space-x-1"
+              [ngClass]="{ 'text-accent': hasLiked(comment.id), 'hover:text-accent': true }"
+            >
+              <i class="fa-solid fa-thumbs-up"></i>
+              <span>{{ comment.likes || 0 }}</span>
+            </button>
+            <button (click)="toggleReplyBox(comment.id)" class="text-sm hover:text-accent">
+              <i class="fa-solid fa-reply"></i>
+            </button>
+          </div>
+        </div>
+        <p class="mt-2">{{ comment.content }}</p>
+
+        <div *ngIf="showReplyBox[comment.id]" class="mt-3">
+          <textarea [(ngModel)]="replyInputs[comment.id]" rows="2"
+            class="w-full p-2 rounded bg-gray-700 text-white mb-2" placeholder="Write a reply..."></textarea>
+          <button
+            (click)="submitReply(comment.id)"
+            class="bg-accent text-secondary px-3 py-1 rounded hover:bg-platinum transition-colors duration-300">
+            Responder
+          </button>
+        </div>
+      </div>
+
+      <ng-container *ngIf="comment.replies">
+        <ng-container *ngFor="let reply of comment.replies">
+          <ng-container *ngTemplateOutlet="renderComment; context: { $implicit: reply, level: level + 1 }"></ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-template>
+
+</section>

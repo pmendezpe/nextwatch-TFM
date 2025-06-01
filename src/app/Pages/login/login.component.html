@@ -1,0 +1,33 @@
+<section class="flex flex-col items-center justify-center py-20 px-6">
+  <div class="w-full max-w-md bg-platinum rounded-lg shadow-md p-8">
+    <h2 class="text-2xl font-heading font-bold text-secondary mb-6 text-center">Iniciar sesión</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <div class="mb-4">
+        <input type="email" id="email" formControlName="email" placeholder="Correo electrónico"
+          class="w-full p-3 rounded-md bg-platinum text-black focus:outline-none focus:ring-2 focus:ring-accent" />
+        <p *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid" 
+          class="text-red-500 text-sm mt-1">Introduce un correo electrónico válido.</p>
+      </div>
+
+      <div class="mb-6">
+        <input type="password" id="password" formControlName="password" placeholder="Contraseña"
+          class="w-full p-3 rounded-md bg-platinum text-black focus:outline-none focus:ring-2 focus:ring-accent" />
+        <p *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" 
+          class="text-red-500 text-sm mt-1">La contraseña es obligatoria.</p>
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid"
+        class="w-full bg-accent text-secondary font-heading py-3 rounded-md hover:bg-secondary transition-colors duration-300 hover:text-platinum"
+      >Acceder</button>
+
+      <p *ngIf="mensaje" class="text-center text-red-500 mt-4">{{ mensaje }}</p>
+    </form>
+
+    <p class="text-sm text-secondary mt-6 text-center">
+      ¿Aún no tienes una cuenta?
+      <a routerLink="/register" class="text-accent hover:underline"> aquí</a>
+    </p>
+  </div>
+</section>

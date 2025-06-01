@@ -1,0 +1,51 @@
+<section class="flex flex-col items-center justify-center py-20 px-6">
+    <div class="w-full max-w-md bg-platinum rounded-lg shadow-md p-8">
+      <h2 class="text-2xl font-heading font-bold text-secondary mb-6 text-center">Crear cuenta</h2>
+  
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  
+        <div class="mb-4">
+          <input type="text" formControlName="nombre" placeholder="Nombre completo"
+            class="w-full p-3 rounded-md bg-platinum text-black focus:outline-none focus:ring-2 focus:ring-accent" />
+          <p *ngIf="registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched"
+            class="text-sm text-red-600 mt-1">El nombre es obligatorio.</p>
+        </div>
+  
+        <div class="mb-4">
+          <input type="email" formControlName="email" placeholder="Correo electrónico"
+            class="w-full p-3 rounded-md bg-platinum text-black focus:outline-none focus:ring-2 focus:ring-accent" />
+          <p *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+            class="text-sm text-red-600 mt-1">Ingresa un correo válido.</p>
+        </div>
+  
+        <div class="mb-4">
+          <input type="password" formControlName="password" placeholder="Contraseña"
+            class="w-full p-3 rounded-md bg-platinum text-black focus:outline-none focus:ring-2 focus:ring-accent" />
+          <p *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+            class="text-sm text-red-600 mt-1">Mínimo 6 caracteres.</p>
+        </div>
+  
+        <div class="mb-6">
+          <input type="password" formControlName="confirmPassword" placeholder="Confirmar contraseña"
+            class="w-full p-3 rounded-md bg-platinum text-black focus:outline-none focus:ring-2 focus:ring-accent" />
+          <p *ngIf="registerForm.errors?.['notSame'] && registerForm.get('confirmPassword')?.touched"
+            class="text-sm text-red-600 mt-1">Las contraseñas no coinciden.</p>
+        </div>
+  
+        <button type="submit"
+          class="w-full bg-accent text-secondary font-heading py-3 rounded-md hover:bg-secondary transition-colors duration-300 hover:text-platinum"
+          [disabled]="registerForm.invalid || cargando">
+          {{ cargando ? 'Registrando...' : 'Registrarse' }}
+        </button>
+      </form>
+  
+      <p class="text-sm text-secondary mt-6 text-center">
+        ¿Ya tienes una cuenta?<a routerLink="/login" class="text-accent hover:underline"> Inicia sesión aquí</a>
+      </p>
+  
+      <p *ngIf="mensaje" class="text-center mt-4 text-sm font-semibold"
+        [ngClass]="mensaje.includes('exitosamente') ? 'text-green-600' : 'text-red-600'">
+        {{ mensaje }}
+      </p>
+    </div>
+</section>

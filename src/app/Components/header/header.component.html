@@ -1,0 +1,34 @@
+<nav class="p-5 bg-primary font-heading w-full md:flex md:items-center md:justify-between">
+    <div class="flex justify-between items-center">
+      <img class="h-20 inline cursor-pointer ml-14" src="assets/images/Logo-removebg-preview.png" routerLink="/index">
+  
+      <span class="text-3xl cursor-pointer md:hidden" (click)="toggleMenu()">
+        <i [ngClass]="isMenuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
+      </span>
+    </div>
+  
+    <div [ngClass]="isMenuOpen ? 'block' : 'hidden'" class="md:block transition-all duration-500 ease-in-out">
+      <ul class="mr-14 md:flex md:items-center">
+        <li class="mx-4 my-6 md:my-0"><a routerLink="/series" class="hover:text-accent">Series</a></li>
+        <li class="mx-4 my-6 md:my-0"><a routerLink="/movies" class="hover:text-accent">Películas</a></li>
+      
+        <ng-container *ngIf="!usuarioLogueado">
+          <li class="mx-4 my-6 md:my-0">
+            <a routerLink="/login" class="bg-platinum text-secondary p-2 rounded-md hover:bg-accent transition-colors duration-300">Iniciar sesión</a>
+          </li>
+          <li class="mx-4 my-6 md:my-0">
+            <a routerLink="/register" class="bg-accent text-secondary p-2 rounded-md hover:bg-platinum transition-colors duration-300">Registrarse</a>
+          </li>
+        </ng-container>
+      
+        <ng-container *ngIf="usuarioLogueado">
+          <li class="mx-4 my-6 md:my-0">
+            <a routerLink="/profile" class="hover:text-accent">Perfil</a>
+          </li>
+          <li class="mx-4 my-6 md:my-0">
+            <button (click)="logOut()" class="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 transition-colors duration-300">Cerrar sesión</button>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+</nav>

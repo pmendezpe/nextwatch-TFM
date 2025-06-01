@@ -1,0 +1,94 @@
+<section class="px-4 py-6">
+
+  <h1 class="font-heading text-2xl md:text-3xl font-bold text-accent mb-2">Películas</h1>
+  <hr class="border-accent mb-4">
+
+  <div class="mb-6">
+      <input
+        type="text"
+        [(ngModel)]="query"
+        (keyup.enter)="searchMovies()"
+        placeholder="Buscar películas..."
+        class="w-full p-3 rounded-md bg-platinum text-black focus:outline-none focus:ring-2 focus:ring-accent"
+      />
+    </div>
+
+  <div class="flex flex-col lg:flex-row gap-6">
+    
+    <aside class="w-full text-white lg:w-1/4 space-y-4">
+      <div>
+        <h3 class="text-lg font-semibold">Género</h3>
+        <select [(ngModel)]="selectedGenre" (change)="filterMovies()" class="w-full p-2 rounded-md text-black">
+          <option value="">Todos</option>
+          <option *ngFor="let genre of genres" [value]="genre.id">{{ genre.name }}</option>
+        </select>
+      </div>
+    
+      <div>
+        <h3 class="text-lg font-semibold">Año de estreno</h3>
+        <input [(ngModel)]="selectedYear" (input)="filterMovies()" type="number" class="w-full p-2 rounded-md text-black" placeholder="Ej: 2023">
+      </div>
+    
+      <div>
+        <h3 class="text-lg font-semibold">Estado</h3>
+        <select [(ngModel)]="selectedState" (change)="filterMovies()" class="w-full p-2 rounded-md text-black">
+          <option value="">Todos</option>
+          <option value="visto">Visto</option>
+          <option value="pendiente">Pendiente</option>
+        </select>
+      </div>
+    
+      <div>
+        <h3 class="text-lg font-semibold">Valoración mínima</h3>
+        <input [(ngModel)]="selectedRating" (input)="filterMovies()" type="number" min="0" max="10" step="0.1" class="w-full p-2 rounded-md text-black">
+      </div>
+    
+      <div>
+        <h3 class="text-lg font-semibold">Ordenar por</h3>
+        <select [(ngModel)]="selectedSort" (change)="filterMovies()" class="w-full p-2 rounded-md text-black">
+          <option value="">--</option>
+          <option value="title">Título</option>
+          <option value="release_date.desc">Año (desc)</option>
+          <option value="release_date.asc">Año (asc)</option>
+          <option value="vote_average.desc">Valoración (desc)</option>
+          <option value="vote_average.asc">Valoración (asc)</option>
+        </select>
+      </div>
+    </aside>
+
+    <div class="w-full lg:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let movie of movies" class="flex flex-col text-white p-4 rounded-lg h-full">
+
+          <img
+            [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
+            alt="Poster"
+            class="rounded mb-3 w-full h-auto object-cover aspect-[2/3]"
+          />
+        
+          <div class="flex flex-col flex-grow">
+            <h2 class="text-lg font-bold mb-1 line-clamp-2">
+              <a [routerLink]="['/detail', movie.id]" [queryParams]="{ type: 'movie' }" class="hover:underline">
+                {{ movie.title }}
+              </a>
+            </h2>
+            <p class="text-sm text-white mb-3">{{ movie.release_date | date: 'yyyy' }} · {{ movie.vote_average }}⭐​</p>
+        
+            <div class="mt-auto flex flex-col gap-2">
+              <button
+                class="w-full font-heading bg-accent text-secondary py-2 rounded hover:bg-platinum transition-colors duration-300"
+                (click)="addItem(movie)">
+                Añadir a la lista
+              </button>
+              <button 
+                (click)="markViewed(movie)"
+                [ngClass]="{'bg-green-500 text-white': movie.vista,'bg-platinum text-secondary': !movie.vista}"
+                class="w-full font-heading py-2 rounded transition-colors duration-300">
+                {{ movie.vista ? 'Marcado como visto' : 'Marcar como visto' }}
+            </button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+  </div>
+</section>
