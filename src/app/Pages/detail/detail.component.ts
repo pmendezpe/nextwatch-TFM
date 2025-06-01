@@ -164,16 +164,28 @@ export class DetailComponent {
       });
   }
 
+  isProcessingLike: boolean = false;
+
   toggleLike(comment: any): void {
-    if (!this.usuario?.id || !comment.id) return;
+    if (!this.usuario?.id || !comment.id || this.isProcessingLike) return;
+
+    this.isProcessingLike = true;
 
     const payload = {
       comentario_id: comment.id,
       usuario_id: this.usuario.id
     };
 
-    this.http.post<{ likes: number }>('hthttps://nextwatch-backend.onrender.com/routes/toggle-like.php', payload)
-      .subscribe(res => {
+    this.http.post<{ likes: number }>(
+      'https://nextwatch-backend.onrender.com/routes/toggle-like.php',
+      payload,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    ).subscribe({
+      next: res => {
         comment.likes = res.likes;
 
         const likedIndex = this.likedComments.indexOf(comment.id);
@@ -182,7 +194,14 @@ export class DetailComponent {
         } else {
           this.likedComments.push(comment.id);
         }
-      });
+      },
+      error: err => {
+        console.error("Error al hacer toggle-like:", err);
+      },
+      complete: () => {
+        this.isProcessingLike = false;
+      }
+    });
   }
 
   hasLiked(commentId: number): boolean {
