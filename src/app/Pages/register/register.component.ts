@@ -32,7 +32,7 @@ export class RegisterComponent {
     this.cargando = true;
     const { nombre, email, password } = this.registerForm.value;
 
-    this.http.post('http://localhost/backend/routes/register.php', { nombre, email, password })
+    this.http.post('https://nextwatch-backend.onrender.com/routes/register.php', { nombre, email, password })
       .subscribe({
         next: (res: any) => {
           this.mensaje = res.mensaje;

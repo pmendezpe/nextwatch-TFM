@@ -51,7 +51,7 @@ export class DetailComponent {
         this.vista = !!item?.vista;
       });
 
-      this.http.get<number[]>(`http://localhost/backend/routes/get-user-likes.php?usuario_id=${this.usuario.id}`)
+      this.http.get<number[]>(`https://nextwatch-backend.onrender.com/routes/get-user-likes.php?usuario_id=${this.usuario.id}`)
         .subscribe(res => {
           this.likedComments = res;
         });
@@ -85,7 +85,7 @@ export class DetailComponent {
   }
 
   loadComments(): void {
-    this.http.get<any[]>(`http://localhost/backend/routes/get-comments.php?id=${this.id}&type=${this.tipo}`)
+    this.http.get<any[]>(`https://nextwatch-backend.onrender.com/routes/get-comments.php?id=${this.id}&type=${this.tipo}`)
       .subscribe(res => {
         const rootComments = res.filter(c => !c.parent_id);
         const replyMap: { [key: number]: any[] } = {};
@@ -157,7 +157,7 @@ export class DetailComponent {
       type: this.tipo
     };
 
-    this.http.post('http://localhost/backend/routes/post-comment.php', newComment)
+    this.http.post('https://nextwatch-backend.onrender.com/routes/post-comment.php', newComment)
       .subscribe(() => {
         this.comment = '';
         this.loadComments();
@@ -172,7 +172,7 @@ export class DetailComponent {
       usuario_id: this.usuario.id
     };
 
-    this.http.post<{ likes: number }>('http://localhost/backend/routes/toggle-like.php', payload)
+    this.http.post<{ likes: number }>('hthttps://nextwatch-backend.onrender.com/routes/toggle-like.php', payload)
       .subscribe(res => {
         comment.likes = res.likes;
 
@@ -206,7 +206,7 @@ export class DetailComponent {
       parent_id: parentId
     };
 
-    this.http.post('http://localhost/backend/routes/post-comment.php', replyData)
+    this.http.post('https://nextwatch-backend.onrender.com/routes/post-comment.php', replyData)
       .subscribe(() => {
         this.replyInputs[parentId] = '';
         this.showReplyBox[parentId] = false;

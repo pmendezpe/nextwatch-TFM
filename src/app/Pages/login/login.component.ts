@@ -25,7 +25,7 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.http.post<any>('http://localhost/backend/routes/login.php', this.loginForm.value)
+      this.http.post<any>('https://nextwatch-backend.onrender.com/routes/login.php', this.loginForm.value)
         .subscribe({
           next: res => {
             if (res.success) {

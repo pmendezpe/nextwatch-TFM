@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ListService {
-  private baseUrl = 'http://localhost/backend/routes';
+  private baseUrl = 'https://nextwatch-backend.onrender.com/routes';
 
   constructor(private http: HttpClient) {}
 
